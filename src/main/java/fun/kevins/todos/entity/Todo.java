@@ -23,4 +23,12 @@ public class Todo {
 
     @Column
     Integer status;
+
+    @Column
+    String createTime;
+
+    @Column
+    String updateTime;
+
+
 }
