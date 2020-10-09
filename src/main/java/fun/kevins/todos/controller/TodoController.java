@@ -3,43 +3,54 @@ package fun.kevins.todos.controller;
 import fun.kevins.todos.entity.Todo;
 import fun.kevins.todos.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api")
 public class TodoController {
     @Autowired
     TodoService todoService;//取得Service物件
 
     @GetMapping("/todos")
-    public String getTodoList(Model model) {
+    public ResponseEntity getTodoList(Model model) {
         Iterable<Todo> todoList = todoService.getTodos();
-        model.addAttribute("todolist", todoList);
-        Todo todo = new Todo();
-        model.addAttribute("todoObject", todo);
-        return "todos";
+        return ResponseEntity.status(HttpStatus.OK).body(todoList);
+    }
+
+    @GetMapping("/todos/{id}")
+    public Optional<Todo> getTodo(@PathVariable Integer id) {
+        Optional<Todo> todo = todoService.findById(id);
+        return todo;
     }
 
     @PostMapping("/todos")
-    public String createTodo(@ModelAttribute Todo todo, Model model) {
-        Iterable<Todo> allTodoList = todoService.createTodo(todo);
-        Todo emptyTodo = new Todo();
-        model.addAttribute("todolist", allTodoList);
-        model.addAttribute("todoObject", emptyTodo);
-        return "redirect:/todos";
+    public ResponseEntity createTodo(@RequestBody Todo todo) {
+        Integer rlt = todoService.createTodo(todo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(rlt);
     }
 
-    @ResponseBody
     @PutMapping("/todos/{id}")
-    public void upadteTodo(@PathVariable Integer id, @RequestBody Todo todo) {
-        todoService.updateTodo(id, todo);
+    public ResponseEntity upadteTodo(@PathVariable Integer id, @RequestBody Todo todo) {
+        Boolean rlt = todoService.updateTodo(id, todo);
+        if (!rlt) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Status 欄位不能為空");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
-    @ResponseBody
     @DeleteMapping("/todos/{id}")
-    public void deleteTodo(@PathVariable Integer id) {
-        todoService.deleteTodo(id);
+    public ResponseEntity deleteTodo(@PathVariable Integer id) {
+        Boolean rlt = todoService.deleteTodo(id);
+        if (!rlt) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id 不存在");
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }
+
 
 }
