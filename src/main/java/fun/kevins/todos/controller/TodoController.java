@@ -2,12 +2,14 @@ package fun.kevins.todos.controller;
 
 import fun.kevins.todos.entity.Todo;
 import fun.kevins.todos.service.TodoService;
+import fun.kevins.todos.utils.JwtToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @RestController
@@ -15,6 +17,15 @@ import java.util.Optional;
 public class TodoController {
     @Autowired
     TodoService todoService;//取得Service物件
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody HashMap<String, String> user) {
+        JwtToken jwtToken = new JwtToken();
+        String token = jwtToken.generateToken(user); // 取得token
+
+        return ResponseEntity.status(HttpStatus.OK).body(token);
+    }
+
 
     @GetMapping("/todos")
     public ResponseEntity getTodoList(Model model) {
