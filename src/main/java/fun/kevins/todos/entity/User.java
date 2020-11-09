@@ -29,7 +29,7 @@ public class User {
     @EqualsAndHashCode.Exclude
     private Set<Todo> todos;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "todos_tag", joinColumns = {@JoinColumn(name = "tag_id")}, inverseJoinColumns = {@JoinColumn(name = "todo_id")})
-    Set<Tag> tags;
+//    @ManyToMany(cascade = CascadeType.ALL)
+//    @JoinTable(name = "todos_tag", joinColumns = {@JoinColumn(name = "tag_id")}, inverseJoinColumns = {@JoinColumn(name = "todo_id")})
+//    Set<Tag> tags;
 }

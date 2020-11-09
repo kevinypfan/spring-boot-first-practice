@@ -1,6 +1,5 @@
 package fun.kevins.todos.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,9 +35,9 @@ public class Todo {
     @Column(nullable = false)
     Date updateTime = new Date();
 
-    @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
+//    @JsonBackReference
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
 }
